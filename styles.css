@@ -1,0 +1,565 @@
+/* ==========================================================================
+   ANSHI SHARMA - CYBER MATRIX & SYNTHWAVE 3D PORTFOLIO
+   Theme: Pitch Obsidian (#030308) + Electric Neon Pink (#ff007f)
+   Design Concept: Cyber Bento Grid, Glowing Scanlines, Holographic Cards
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap');
+
+:root {
+  --bg-pitch: #030308;
+  --bg-surface: #0a0a14;
+  --bg-card: rgba(14, 10, 26, 0.75);
+  --bg-card-hover: rgba(28, 16, 48, 0.9);
+  
+  --neon-pink: #ff007f;
+  --neon-hot-pink: #ff1493;
+  --neon-magenta: #e60067;
+  --neon-cyan: #00f3ff;
+  --neon-purple: #a855f7;
+  --neon-glow-pink: rgba(255, 0, 127, 0.5);
+  
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --border-neon: rgba(255, 0, 127, 0.3);
+  --border-neon-strong: rgba(255, 0, 127, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  --shadow-neon: 0 0 30px rgba(255, 0, 127, 0.4);
+}
+
+/* --- Global Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--bg-pitch);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* --- Scanlines Overlay --- */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.4;
+}
+
+/* --- WebGL Canvas & Cyber Grid --- */
+#webgl-container {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-pitch); }
+::-webkit-scrollbar-thumb {
+  background: var(--neon-pink);
+  border-radius: 4px;
+  box-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* --- Custom Cursor --- */
+.custom-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: var(--neon-pink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px var(--neon-pink), 0 0 30px var(--neon-pink);
+  transition: transform 0.1s ease;
+}
+
+.custom-cursor-follower {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--neon-pink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease-out;
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.2);
+}
+
+.cursor-hover .custom-cursor {
+  transform: translate(-50%, -50%) scale(2);
+  background: var(--neon-cyan);
+  box-shadow: 0 0 20px var(--neon-cyan);
+}
+
+.cursor-hover .custom-cursor-follower {
+  transform: translate(-50%, -50%) scale(1.5);
+  border-color: var(--neon-cyan);
+}
+
+/* --- Layout Container --- */
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 110px 0;
+  position: relative;
+}
+
+/* --- Typography --- */
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+.glitch-text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 20px var(--neon-glow-pink);
+  position: relative;
+  display: inline-block;
+}
+
+.neon-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, var(--neon-pink) 60%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cyber-subtitle {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--neon-pink);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+  text-shadow: 0 0 10px var(--neon-glow-pink);
+}
+
+.section-title {
+  font-size: 2.8rem;
+  margin-bottom: 50px;
+}
+
+/* --- Cyber Buttons --- */
+.cyber-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  position: relative;
+  background: rgba(255, 0, 127, 0.1);
+  color: #fff;
+  border: 1px solid var(--neon-pink);
+  box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
+  transition: var(--transition-fast);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+
+.cyber-btn:hover {
+  background: var(--neon-pink);
+  color: #fff;
+  box-shadow: 0 0 30px var(--neon-pink);
+  transform: translateY(-2px);
+}
+
+.cyber-btn-outline {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--glass-border);
+}
+
+.cyber-btn-outline:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+/* --- Header & Navbar --- */
+.cyber-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: var(--transition-normal);
+}
+
+.cyber-nav.scrolled {
+  padding: 12px 0;
+  background: rgba(3, 3, 8, 0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-neon);
+}
+
+.nav-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--neon-pink);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--neon-pink);
+}
+
+.nav-menu {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.nav-item {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  transition: var(--transition-fast);
+}
+
+.nav-item:hover, .nav-item.active {
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* --- Hero Section --- */
+.hero-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.hero-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 16px;
+  background: rgba(255, 0, 127, 0.08);
+  border: 1px solid var(--border-neon);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--neon-pink);
+  margin-bottom: 24px;
+}
+
+.main-hero-title {
+  font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.typed-role-wrap {
+  font-family: var(--font-mono);
+  font-size: 1.3rem;
+  color: var(--neon-cyan);
+  margin-bottom: 24px;
+  min-height: 36px;
+}
+
+.hero-bio {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 36px;
+  max-width: 620px;
+}
+
+/* --- Bento Grid (Summary & Skills Showcase) --- */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.bento-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-neon);
+  backdrop-filter: blur(16px);
+  padding: 30px;
+  position: relative;
+  transition: var(--transition-normal);
+  overflow: hidden;
+}
+
+.bento-card::before, .bento-card::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--neon-pink);
+}
+
+.bento-card::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+.bento-card::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+.bento-card:hover {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 30px rgba(255, 0, 127, 0.25);
+  transform: translateY(-4px);
+}
+
+.bento-large {
+  grid-column: span 2;
+}
+
+.bento-tall {
+  grid-row: span 2;
+}
+
+.bento-stat-num {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--neon-pink);
+  text-shadow: 0 0 15px var(--neon-pink);
+}
+
+.bento-title {
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+/* --- Experience & Education Dual Cyber Nodes --- */
+.dual-timeline-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.cyber-node-card {
+  background: var(--bg-card);
+  border-left: 3px solid var(--neon-pink);
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  backdrop-filter: blur(12px);
+  transition: var(--transition-fast);
+}
+
+.cyber-node-card:hover {
+  background: var(--bg-card-hover);
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.2);
+  transform: translateX(4px);
+}
+
+.node-date {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--neon-cyan);
+  margin-bottom: 6px;
+}
+
+.node-company {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--neon-pink);
+  margin-bottom: 12px;
+}
+
+/* --- Project Cyber Dossiers --- */
+.projects-cyber-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 30px;
+}
+
+.dossier-card {
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-card:hover {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 35px rgba(255, 0, 127, 0.3);
+  transform: translateY(-6px);
+}
+
+.dossier-header {
+  height: 160px;
+  background: linear-gradient(135deg, rgba(255,0,127,0.15), rgba(0,243,255,0.05));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+  color: var(--neon-pink);
+  border-bottom: 1px solid var(--border-neon);
+}
+
+.dossier-body {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dossier-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.dossier-tag {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--neon-pink);
+  background: rgba(255, 0, 127, 0.1);
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 0, 127, 0.2);
+}
+
+.dossier-title {
+  font-size: 1.35rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.dossier-desc {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+/* --- Contact & Terminal --- */
+.contact-cyber-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.terminal-box {
+  background: #020205;
+  border: 1px solid var(--neon-pink);
+  box-shadow: 0 0 30px rgba(255, 0, 127, 0.2);
+  padding: 24px;
+  font-family: var(--font-mono);
+}
+
+.terminal-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.term-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.cyber-input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  font-family: var(--font-mono);
+  margin-bottom: 16px;
+  outline: none;
+}
+
+.cyber-input:focus {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 15px var(--neon-glow-pink);
+}
+
+/* --- Footer --- */
+.cyber-footer {
+  padding: 40px 0;
+  border-top: 1px solid var(--border-neon);
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* --- Responsive Layout --- */
+@media (max-width: 992px) {
+  .hero-grid, .dual-timeline-grid, .contact-cyber-layout {
+    grid-template-columns: 1fr;
+  }
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .bento-large, .bento-tall {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+}
